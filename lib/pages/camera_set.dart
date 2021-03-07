@@ -16,7 +16,7 @@ class CameraSet extends StatefulWidget {
 }
 
 class _CameraSetState extends State<CameraSet> {
-  var qrText = '';
+  Barcode result;
   var flashState = flashOn;
   var cameraState = frontCamera;
   QRViewController controller;
@@ -70,19 +70,21 @@ class _CameraSetState extends State<CameraSet> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('Hasil Scan : $qrText',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text('Hasil Scan : $result',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
                   TextButton(
                       onPressed: () {
-                        _launchInBrowser(qrText);
+                        _launchInBrowser(result.code);
                       },
                       child: Text(
                         'Buka Link',
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ButtonStyle(
-                        foregroundColor:
+                        backgroundColor:
                             MaterialStateProperty.all(Colors.blue[200]),
                       )),
                   Row(
@@ -178,7 +180,7 @@ class _CameraSetState extends State<CameraSet> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData as String;
+        result = scanData;
       });
     });
   }

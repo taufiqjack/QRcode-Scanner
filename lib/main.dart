@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scan_qr/pages/camera_set.dart';
-import 'package:scan_qr/pages/scan.dart';
 
 void main() {
   runApp(MyApp());
