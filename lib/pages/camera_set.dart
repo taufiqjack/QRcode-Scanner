@@ -70,7 +70,7 @@ class _CameraSetState extends State<CameraSet> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('Hasil Scan : $result',
+                  Text('Hasil Scan : ${result}',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
