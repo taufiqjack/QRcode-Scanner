@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -70,11 +71,14 @@ class _CameraSetState extends State<CameraSet> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('Hasil Scan : ${result}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
+                  if (result != null)
+                    Text('Hasil: ${result.code}',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold))
+                  else
+                    Text('Scan a code'),
                   TextButton(
                       onPressed: () {
                         _launchInBrowser(result.code);
@@ -115,24 +119,33 @@ class _CameraSetState extends State<CameraSet> {
                       Container(
                         margin: EdgeInsets.all(8),
                         child: TextButton(
-                          onPressed: () {
-                            if (controller != null) {
-                              controller.flipCamera();
-                              if (_isBackCamera(cameraState)) {
-                                setState(() {
-                                  cameraState = frontCamera;
-                                });
-                              } else {
-                                setState(() {
-                                  cameraState = backCamera;
-                                });
+                            onPressed: () {
+                              if (controller != null) {
+                                controller.flipCamera();
+                                if (_isBackCamera(cameraState)) {
+                                  setState(() {
+                                    cameraState = frontCamera;
+                                  });
+                                } else {
+                                  setState(() {
+                                    cameraState = backCamera;
+                                  });
+                                }
                               }
-                            }
-                          },
-                          child:
-                              Text(cameraState, style: TextStyle(fontSize: 20)),
-                        ),
-                      )
+                            },
+                            child: FutureBuilder(
+                              future: controller?.getCameraInfo(),
+                              builder: (context, snapshot) {
+                                if (snapshot.data != null) {
+                                  return Text(cameraState,
+                                      style: TextStyle(fontSize: 20));
+                                } else {
+                                  return Text('loading',
+                                      style: TextStyle(fontSize: 20));
+                                }
+                              },
+                            )),
+                      ),
                     ],
                   ),
                   Row(
